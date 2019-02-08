@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 std::vector<std::string> split_string(std::string input, char delimiter) {
 	std::vector<std::string> output = {};
@@ -203,127 +204,81 @@ std::string decimalToHex(long long int decimal) {
 	return hex;
 }
 
-/*
-std::string binaryToHex(std::string binary) {
-	std::cout << binary;
-	while (binary.length() % 4 != 0) {
-		binary.insert(0, "0");
-	}
-	std::vector<std::string> binary_packets = {};
-	while (binary.length() >= 4) {
-		binary_packets.push_back(binary.substr(binary.length() - 4));
-		binary.erase(binary.length() - 4);
-	}
-	std::string hex = "";
-	for (int i = 0; i < binary_packets.size() ; i++) {
-		if (binary_packets[i] == "0000") {
-			hex.insert(0, "0");
-		}
-		else if (binary_packets[i] == "0001") {
-			hex.insert(0, "1");
-		}
-		else if (binary_packets[i] == "0010") {
-			hex.insert(0, "2");
-		}
-		else if (binary_packets[i] == "0011") {
-			hex.insert(0, "3");
-		}
-		else if (binary_packets[i] == "0100") {
-			hex.insert(0, "4");
-		}
-		else if (binary_packets[i] == "0101") {
-			hex.insert(0, "5");
-		}
-		else if (binary_packets[i] == "0110") {
-			hex.insert(0, "6");
-		}
-		else if (binary_packets[i] == "0111") {
-			hex.insert(0, "7");
-		}
-		else if (binary_packets[i] == "1000") {
-			hex.insert(0, "8");
-		}
-		else if (binary_packets[i] == "1001") {
-			hex.insert(0, "9");
-		}
-		else if (binary_packets[i] == "1010") {
-			hex.insert(0, "A");
-		}
-		else if (binary_packets[i] == "1011") {
-			hex.insert(0, "B");
-		}
-		else if (binary_packets[i] == "1100") {
-			hex.insert(0, "C");
-		}
-		else if (binary_packets[i] == "1101") {
-			hex.insert(0, "D");
-		}
-		else if (binary_packets[i] == "1110") {
-			hex.insert(0, "E");
-		}
-		else if (binary_packets[i] == "1111") {
-			hex.insert(0, "F");
-		}
-	}
-	return hex;
-}
-*/
-
 
 int main() {
-	std::string input;
-	std::getline(std::cin, input);
-	bool multiplication = false;
-	bool addition = false;
-	int num1;
-	int num2;
-	long long int output;
+	//std::string input;
+	//std::getline(std::cin, input);
 
-	if (input.find('+') != std::string::npos) {
-		addition = true;
+	std::ifstream fin("input.txt");
+
+	if (!fin.is_open()) {
+		std::cout << "File could not be opened.\n";
+		system("pause");
+		return -1;
 	}
-	else {
-		multiplication = true;
-	}
+	
+	int num_calculations;
+	fin >> num_calculations;
 
-	if (input.at(0) == 'B') {
-		num1 = binaryToDecimal(split_string(input, ' ')[1]);
-		num2 = binaryToDecimal(split_string(input, ' ')[3]);
+	std::string temp;
+	std::getline(fin, temp); // extract the \n character from the input stream
 
-		if (addition) {
-			output = num1 + num2;
+	 for (int i = 0; i < num_calculations; i++) {
+
+		std::string input;
+		std::getline(fin, input);
+
+		bool multiplication = false;
+		bool addition = false;
+		long long int num1;
+		long long int num2;
+		long long int output;
+
+		if (input.find('+') != std::string::npos) {
+			addition = true;
 		}
 		else {
-			output = num1 * num2;
+			multiplication = true;
 		}
-		std::cout << decimalToBinary(output) << '\n';
-	}
-	else if (input.at(0) == 'D') {
-		num1 = stringToDecimal(split_string(input, ' ')[1]);
-		num2 = stringToDecimal(split_string(input, ' ')[3]);
 
-		if (addition) {
-			output = num1 + num2;
-		}
-		else {
-			output = num1 * num2;
-		}
-		std::cout << output << '\n';
-	}
-	else if (input.at(0) == 'H') {
-		num1 = hexToDecimal(split_string(input, ' ')[1]);
-		num2 = hexToDecimal(split_string(input, ' ')[3]);
-		
-		if (addition) {
-			output = num1 + num2;
-		}
-		else {
-			output = num1 * num2;
-		}
-		std::cout << num1 << ' ' << num2 << '\n';
-		std::cout << output << '\n';
-		std::cout << decimalToHex(output) << '\n';
-	}
+		if (input.at(0) == 'B') {
+			num1 = binaryToDecimal(split_string(input, ' ')[1]);
+			num2 = binaryToDecimal(split_string(input, ' ')[3]);
 
-	system("pause");
+			if (addition) {
+				output = num1 + num2;
+			}
+			else {
+				output = num1 * num2;
+			}
+			std::cout << decimalToBinary(output) << '\n';
+		}
+		else if (input.at(0) == 'D') {
+			num1 = stringToDecimal(split_string(input, ' ')[1]);
+			num2 = stringToDecimal(split_string(input, ' ')[3]);
+
+			if (addition) {
+				output = num1 + num2;
+			}
+			else {
+				output = num1 * num2;
+			}
+			std::cout << output << '\n';
+		}
+		else if (input.at(0) == 'H') {
+			num1 = hexToDecimal(split_string(input, ' ')[1]);
+			num2 = hexToDecimal(split_string(input, ' ')[3]);
+
+			if (addition) {
+				output = num1 + num2;
+			}
+			else {
+				output = num1 * num2;
+			}
+			std::cout << "Num1: " << num1 << '\n' << "Num2: " << num2 << '\n';
+			
+			std::cout << decimalToHex(output) << '\n';
+		}
+	}
+	//system("pause");
 }
